@@ -1,22 +1,33 @@
-// Global Styles
-import '../src/styles/reset.css'
-import '../src/styles/theme-bitovi-light.css'
-import '../src/styles/main.css'
-import '../src/styles/colors.css'
-import '../src/styles/text.css'
-import '../src/styles/shadows.css'
-import '../src/styles/forms.css'
-import '../src/styles/buttons.css'
+import { DEFAULT_VIEWPORT, INITIAL_VIEWPORTS } from '@storybook/addon-viewport'
 
-export const parameters = {
-  actions: { argTypesRegex: "^on[A-Z].*" },
-  controls: {
-    matchers: {
-      color: /(background|color)$/i,
-      date: /Date$/,
+import '../src/index.css'
+import * as path from "path";
+
+
+const preview = {
+  parameters: {
+    actions: { argTypesRegex: '^on[A-Z].*' },
+    viewport: {
+      viewports: INITIAL_VIEWPORTS,
+      defaultViewport: DEFAULT_VIEWPORT,
+    },
+    controls: {
+      matchers: {
+        color: /(background|color)$/i,
+        date: /Date$/i,
+      },
     },
   },
 }
 
-// Apply the theme variables to the page.
-document.body.classList.add('theme-bitovi-light')
+export const webpackFinal = async (config) => {
+  config.module.rules.push({
+    test: /\.css$/,
+    use: ['style-loader', 'css-loader'],
+    include: path.resolve(__dirname, '../'),
+  })
+
+  return config
+}
+
+export default preview
